@@ -8,7 +8,12 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent,
+} from "../../componentsUi/ui/card";
 
 const data = [
     { month: "Jan", value: 5000 },
