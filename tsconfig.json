@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/app/components/ui/vanta.tsx"  ],
   "exclude": [
     "node_modules"
   ]

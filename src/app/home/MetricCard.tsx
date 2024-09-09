@@ -4,7 +4,7 @@ import {
     CardContent,
     CardHeader,
     CardTitle,
-} from "../../componentsUi/ui/card";
+} from "../components/ui/card";
 import { Progress } from "@radix-ui/react-progress";
 
 const MetricCard = ({
