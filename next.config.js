@@ -8,6 +8,13 @@ const nextConfig = {
     config.externals.push({
       'spline-runtime': 'Spline',
     });
+     config.resolve.fallback = {
+      fs: false,
+      http2: false,
+      child_process: false,
+      net: false,
+      tls: false,
+    };
     return config;
   },
 };

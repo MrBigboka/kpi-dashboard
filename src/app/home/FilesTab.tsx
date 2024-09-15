@@ -1,5 +1,4 @@
-// FilesTab.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     CardContent,
@@ -7,30 +6,78 @@ import {
     CardTitle,
 } from "../components/ui/card";
 import {
-    TableHeader,
-    TableRow,
-    TableHead,
+    Table,
     TableBody,
     TableCell,
-    Table,
-} from "../../../@/components/ui/table";
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "../../../components/table";
 import FileUpload from "../helper/FileUpload";
+import { FileText, Image, File as FileIcon } from "lucide-react";
+
 interface FileData {
-    id: number;
+    id: string;
     name: string;
     size: string;
     date: string;
+    type: string;
 }
 
-interface FilesTabProps {
-    uploadedFiles: FileData[];
-    handleFileUpload: (acceptedFiles: File[]) => void;
-}
+const FilesTab: React.FC = () => {
+    const [uploadedFiles, setUploadedFiles] = useState<FileData[]>([]);
+    const folderId = "YOUR_FOLDER_ID"; // Remplacez par l'ID de votre dossier Google Drive
 
-const FilesTab: React.FC<FilesTabProps> = ({
-    uploadedFiles,
-    handleFileUpload,
-}) => {
+    // Fonction pour récupérer la liste des fichiers depuis Google Drive
+    const fetchFiles = async () => {
+        try {
+            const response = await fetch(`/api/listFiles`);
+            const data = await response.json();
+            if (data.files) {
+                const files: FileData[] = data.files.map((file: any) => ({
+                    id: file.id,
+                    name: file.name,
+                    size: (file.size / (1024 * 1024)).toFixed(2) + " MB", // Convertir la taille en MB
+                    date: new Date(file.modifiedTime).toLocaleDateString(),
+                    type: file.mimeType,
+                }));
+                setUploadedFiles(files);
+            }
+        } catch (error) {
+            console.error(
+                "Erreur lors de la récupération des fichiers :",
+                error
+            );
+        }
+    };
+
+    // Appeler l'API au montage du composant pour charger les fichiers
+    useEffect(() => {
+        fetchFiles();
+    }, []);
+
+    function getFileIcon(type: string) {
+        if (type.startsWith("image/")) {
+            return <Image className="h-5 w-5 text-muted-foreground" />;
+        } else if (type === "application/pdf") {
+            return <FileText className="h-5 w-5 text-muted-foreground" />;
+        } else {
+            return <FileIcon className="h-5 w-5 text-muted-foreground" />;
+        }
+    }
+
+    const handleFileDrop = (acceptedFiles: File[]) => {
+        // Pour l'instant, on ajoute des fichiers mockés
+        const newFiles = acceptedFiles.map((file, index) => ({
+            id: `${Date.now()}-${index}`,
+            name: file.name,
+            size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+            date: new Date().toLocaleDateString(),
+            type: file.type,
+        }));
+        setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    };
+
     return (
         <>
             <Card className="mb-4">
@@ -44,20 +91,27 @@ const FilesTab: React.FC<FilesTabProps> = ({
                                 <TableHead>Nom du fichier</TableHead>
                                 <TableHead>Taille</TableHead>
                                 <TableHead>Date de téléversement</TableHead>
+                                <TableHead>Type</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {uploadedFiles.map((file) => (
                                 <TableRow key={file.id}>
-                                    <TableCell>{file.name}</TableCell>
+                                    <TableCell className="flex items-center">
+                                        {getFileIcon(file.type)}
+                                        <span className="ml-2">
+                                            {file.name}
+                                        </span>
+                                    </TableCell>
                                     <TableCell>{file.size}</TableCell>
                                     <TableCell>{file.date}</TableCell>
+                                    <TableCell>{file.type}</TableCell>
                                 </TableRow>
                             ))}
                             {uploadedFiles.length === 0 && (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={3}
+                                        colSpan={4}
                                         className="text-center"
                                     >
                                         Aucun fichier téléchargé
@@ -73,7 +127,7 @@ const FilesTab: React.FC<FilesTabProps> = ({
                     <CardTitle>Glisser-déposer un fichier</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <FileUpload onDrop={handleFileUpload} />
+                    <FileUpload onDrop={handleFileDrop} />
                 </CardContent>
             </Card>
         </>

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // Pour la redirection
 import { Mail, Lock, LogIn, Building } from "lucide-react"; // Icônes
-import { Label } from "../../../@/components/ui/label";
-import { Button } from "../../../@/components/ui/button";
-import { Input } from "../../../@/components/ui/input";
+import { Label } from "../../../components/label";
+import { Button } from "../../../components/button";
+import { Input } from "../../../components/input";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -116,23 +116,6 @@ export default function Login() {
                         <LogIn className="mr-2 h-4 w-4" /> Connexion
                     </Button>
                 </form>
-
-                {/* Citation en bas */}
-                <div className="mt-6 text-center">
-                    <blockquote className="space-y-2">
-                        <p className="text-sm italic text-gray-700">
-                            &ldquo;L'IA et l'automatisation ne sont pas
-                            seulement des outils, ce sont des catalyseurs de
-                            progrès. Avec SmartScaling, nous avons transformé
-                            notre approche de la productivité, permettant à
-                            notre équipe de se concentrer sur l'innovation
-                            plutôt que sur les tâches répétitives.&rdquo;
-                        </p>
-                        <footer className="text-xs text-gray-500">
-                            Tout droit réservé à SmartScaling™
-                        </footer>
-                    </blockquote>
-                </div>
             </div>
         </div>
     );

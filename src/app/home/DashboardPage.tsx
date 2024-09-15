@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 import { fr } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
+import { motion } from "framer-motion";
 import {
     Home,
     Folder,
@@ -18,17 +19,17 @@ import {
     TrendingUp,
     Users,
 } from "lucide-react";
-import DateRangePicker from "../components/ui/date-picker";
 import DownloadButton from "./DownloadButton";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from "../../../@/components/ui/tabs";
+} from "../../../components/tabs";
 import OverviewTab from "./OverviewTab";
 import FilesTab from "./FilesTab";
 import ContactTab from "./ContactTab";
+import { DatePickerWithRange } from "../components/ui/date-picker";
 
 interface FileData {
     id: number;
@@ -79,9 +80,6 @@ const DashboardPage: React.FC = () => {
         from: new Date(2023, 0, 1),
         to: new Date(),
     });
-    const [contactTitle, setContactTitle] = useState<string>("");
-    const [contactBody, setContactBody] = useState<string>("");
-    const [contactType, setContactType] = useState<string>("");
     const [uploadedFiles, setUploadedFiles] =
         useState<FileData[]>(initialFiles);
 
@@ -91,6 +89,7 @@ const DashboardPage: React.FC = () => {
             name: file.name,
             size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
             date: new Date().toLocaleDateString(),
+            type: file.type,
         }));
         setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
     };
@@ -160,21 +159,14 @@ const DashboardPage: React.FC = () => {
 
     const monthlySavingsData = generateMonthlySavingsData(dateRange);
 
-    const handleContactSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Formulaire soumis:", {
-            contactType,
-            contactTitle,
-            contactBody,
-        });
-        setContactType("");
-        setContactTitle("");
-        setContactBody("");
-    };
-
     return (
         <div className="container mx-auto p-4">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <motion.div
+                className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold">
                         Tableau de bord - SOFIA
@@ -184,16 +176,21 @@ const DashboardPage: React.FC = () => {
                     </p>
                 </div>
                 {activeTab === "overview" && (
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                    <motion.div
+                        className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         <div className="w-full sm:w-auto">
-                            <DateRangePicker />
+                            <DatePickerWithRange />
                         </div>
                         <div className="w-full sm:w-auto">
                             <DownloadButton />
                         </div>
-                    </div>
+                    </motion.div>
                 )}
-            </div>
+            </motion.div>
 
             <Tabs
                 value={activeTab}
@@ -214,32 +211,28 @@ const DashboardPage: React.FC = () => {
                         Contact
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="overview">
-                    <OverviewTab
-                        metricCardsData={metricCardsData}
-                        formattedMoneySaved={formattedMoneySaved}
-                        timeSavedText={timeSavedText}
-                        monthlySavingsData={monthlySavingsData}
-                        daysInRange={daysInRange}
-                        conversations={conversations}
-                    />
-                </TabsContent>
-                <TabsContent value="files">
-                    <FilesTab
-                        uploadedFiles={uploadedFiles}
-                        handleFileUpload={handleFileUpload}
-                    />
-                </TabsContent>
-                <TabsContent value="contact">
-                    <ContactTab
-                        handleContactSubmit={handleContactSubmit}
-                        setContactType={setContactType}
-                        contactTitle={contactTitle}
-                        setContactTitle={setContactTitle}
-                        contactBody={contactBody}
-                        setContactBody={setContactBody}
-                    />
-                </TabsContent>
+                <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <TabsContent value="overview">
+                        <OverviewTab
+                            metricCardsData={metricCardsData}
+                            formattedMoneySaved={formattedMoneySaved}
+                            timeSavedText={timeSavedText}
+                            monthlySavingsData={monthlySavingsData}
+                            daysInRange={daysInRange}
+                            conversations={conversations}
+                        />
+                    </TabsContent>
+                    <TabsContent value="files">
+                        <FilesTab />
+                    </TabsContent>
+                    <TabsContent value="contact">
+                        <ContactTab />
+                    </TabsContent>
+                </motion.div>
             </Tabs>
         </div>
     );

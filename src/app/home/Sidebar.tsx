@@ -1,29 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // Next.js navigation
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
     LayoutDashboard,
     ChevronLeft,
     ChevronRight,
     LogOut,
-} from "lucide-react"; // Icônes ShadCN
+    MessageCircle,
+} from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
+import "./Sidebar.css";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { cn } from "../lib/util";
+import { Button } from "../../../components/button";
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "../../../@/components/ui/avatar";
-import { Button } from "../../../@/components/ui/button";
-import { ScrollArea } from "../../../@/components/ui/scroll-area";
-import { cn } from "../lib/util";
-import { ThemeToggle } from "./ThemeToggle";
+} from "../../../components/avatar";
 
 export default function Sidebar() {
-    const [isOpen, setIsOpen] = useState(true);
-    const [active, setActive] = useState("dashboard"); // Pour garder une trace du bouton sélectionné
+    const [isOpen, setIsOpen] = useState(false);
+    const [active, setActive] = useState("dashboard");
     const router = useRouter();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (pathname === "/") {
+            setActive("dashboard");
+        } else if (pathname === "/chat-history") {
+            setActive("chat-history");
+        }
+    }, [pathname]);
 
     const toggleSidebar = () => setIsOpen(!isOpen);
+
+    const navItems = [
+        {
+            id: "dashboard",
+            icon: LayoutDashboard,
+            label: "Tableau de bord",
+            path: "/",
+        },
+        {
+            id: "chat-history",
+            icon: MessageCircle,
+            label: "Historique des chats",
+            path: "/chat-history",
+        },
+    ];
 
     return (
         <div
@@ -50,29 +76,39 @@ export default function Sidebar() {
                 )}
             </div>
 
-            {/* Menu de Navigation - Seulement Tableau de bord */}
+            {/* Menu de Navigation */}
             <ScrollArea className="flex-grow">
                 <nav className="flex flex-col mt-4">
-                    <Button
-                        variant="ghost"
-                        className={cn(
-                            "w-full justify-center text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white relative",
-                            !isOpen &&
-                                active === "dashboard" &&
-                                "border-r-4 border-black dark:border-white"
-                        )}
-                        onClick={() => {
-                            setActive("dashboard");
-                            router.push("/");
-                        }}
-                    >
-                        <LayoutDashboard
-                            className={`transition-all ${
-                                isOpen ? "h-3 w-3 mr-2" : "h-5 w-5"
-                            }`}
-                        />
-                        {isOpen && <span>Tableau de bord</span>}
-                    </Button>
+                    {navItems.map((item) => (
+                        <Button
+                            key={item.id}
+                            variant="ghost"
+                            className={cn(
+                                "w-full justify-center text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white relative",
+                                active === item.id &&
+                                    "bg-gray-100 dark:bg-gray-800",
+                                "group"
+                            )}
+                            onClick={() => {
+                                setActive(item.id);
+                                router.push(item.path);
+                            }}
+                        >
+                            <item.icon
+                                className={`transition-all ${
+                                    isOpen ? "h-3 w-3 mr-2" : "h-5 w-5"
+                                }`}
+                            />
+                            {isOpen && <span>{item.label}</span>}
+                            <div
+                                className={cn(
+                                    "absolute bottom-0 left-0 h-0.5 bg-primary transition-all",
+                                    active === item.id ? "w-full" : "w-0",
+                                    "group-hover:w-full"
+                                )}
+                            />
+                        </Button>
+                    ))}
                 </nav>
             </ScrollArea>
 
@@ -82,9 +118,7 @@ export default function Sidebar() {
                     variant="ghost"
                     className={cn(
                         "w-full justify-center text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white relative",
-                        !isOpen &&
-                            active === "logout" &&
-                            "border-r-4 border-black dark:border-white"
+                        active === "logout" && "bg-gray-100 dark:bg-gray-800"
                     )}
                     onClick={() => {
                         setActive("logout");

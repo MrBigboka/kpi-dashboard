@@ -1,5 +1,5 @@
 import { Download } from "lucide-react"; // Import an icon from shadcn
-import { Button } from "../../../@/components/ui/button";
+import { Button } from "../../../components/button";
 import { cn } from "../lib/util";
 
 export default function DownloadButton() {
