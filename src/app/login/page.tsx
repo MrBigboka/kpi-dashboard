@@ -1,26 +1,35 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Pour la redirection
-import { Mail, Lock, LogIn, Building } from "lucide-react"; // Icônes
+import { useRouter } from "next/navigation";
+import { LogIn, Building, Lock, Loader2 } from "lucide-react"; // Utiliser Loader2 comme spinner
 import { Label } from "../../../components/label";
 import { Button } from "../../../components/button";
 import { Input } from "../../../components/input";
+import { useAuth } from "../context/AuthContext"; // Importer useAuth
+import Image from "next/image";
 
 export default function Login() {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false); // État de chargement
+    const [error, setError] = useState<string | null>(null); // État pour l'erreur
+    const { login } = useAuth(); // Récupérer la fonction login du contexte
     const router = useRouter();
 
-    function handleSubmit(event: React.FormEvent) {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (email === "1234" && password === "1234") {
-            router.push("/"); // Redirection vers le dashboard après la connexion
-        } else {
-            alert("Identifiants incorrects");
+        setIsLoading(true); // Démarrer le spinner
+        setError(null); // Réinitialiser l'erreur
+        try {
+            await login(username, password);
+            router.push("/"); // Redirection vers la page d'accueil
+        } catch (error) {
+            setError("Erreur lors de la connexion. Vérifiez vos identifiants.");
+        } finally {
+            setIsLoading(false); // Arrêter le spinner
         }
-    }
+    };
 
     return (
         <div className="relative flex h-screen w-screen items-center justify-center">
@@ -63,7 +72,7 @@ export default function Login() {
                         Connexion
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Entrer votre code d'entreprise et votre mots de passe
+                        Entrer votre code d'entreprise et votre mot de passe
                     </p>
                 </div>
 
@@ -71,18 +80,18 @@ export default function Login() {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <Label
-                            htmlFor="email"
+                            htmlFor="username"
                             className="text-gray-700 font-semibold"
                         >
                             Code entreprise
                         </Label>
                         <div className="relative">
                             <Input
-                                id="email"
+                                id="username"
                                 type="text"
                                 placeholder="Entrez le code de l'entreprise"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 className="pl-10"
                             />
                             <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -112,8 +121,14 @@ export default function Login() {
                     <Button
                         type="submit"
                         className="w-full flex items-center justify-center"
+                        disabled={isLoading} // Désactiver le bouton pendant le chargement
                     >
-                        <LogIn className="mr-2 h-4 w-4" /> Connexion
+                        {isLoading ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <LogIn className="mr-2 h-4 w-4" />
+                        )}
+                        {isLoading ? "Connexion en cours..." : "Connexion"}
                     </Button>
                 </form>
             </div>
