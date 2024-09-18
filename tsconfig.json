@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/app/components/ui/vanta.tsx"
-   ,"src/app/components/ui/date-picker.tsx"  ],
+   ,"src/app/components/ui/date-picker.tsx", "src/app/services/googleDriveService.js"  ],
   "exclude": [
     "node_modules"
   ]
