@@ -26,7 +26,6 @@ interface FileData {
 
 const FilesTab: React.FC = () => {
     const [uploadedFiles, setUploadedFiles] = useState<FileData[]>([]);
-    const folderId = "YOUR_FOLDER_ID"; // Remplacez par l'ID de votre dossier Google Drive
 
     // Fonction pour récupérer la liste des fichiers depuis Google Drive
     const fetchFiles = async () => {

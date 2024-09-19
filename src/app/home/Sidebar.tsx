@@ -74,7 +74,7 @@ export default function Sidebar() {
     return (
         <motion.div
             className={cn(
-                "flex flex-col h-screen transition-all duration-300 sticky top-0 bg-background border-r border-gray-200 dark:border-gray-800 overflow-hidden",
+                "flex flex-col h-screen transition-all duration-300 sticky top-0 bg-background border-r border-gray-200 dark:border-gray-800",
                 isOpen ? "w-64" : "w-16"
             )}
             animate={{ width: isOpen ? 256 : 64 }}
@@ -131,7 +131,7 @@ export default function Sidebar() {
             </div>
 
             {/* Menu de Navigation */}
-            <ScrollArea className="flex-grow">
+            <ScrollArea className="flex-grow h-0 md:h-auto">
                 <nav className="flex flex-col mt-4">
                     {navItems.map((item) => (
                         <Button
@@ -191,7 +191,7 @@ export default function Sidebar() {
                             ? "text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-800 hover:text-red-700 dark:hover:text-red-200"
                             : "text-red-500 dark:text-red-400 border-red-500 dark:border-red-400",
                         active === "logout" && "bg-red-100 dark:bg-red-800",
-                        !isOpen && "h-12 p-0" // Hauteur fixe et padding réduit quand la barre est fermée
+                        !isOpen && "h-12 p-0"
                     )}
                     onClick={() => {
                         setActive("logout");
