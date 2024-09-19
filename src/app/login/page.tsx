@@ -34,7 +34,7 @@ export default function Login() {
     };
 
     return (
-        <div className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-black">
+        <div className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-black transform scale-150">
             {/* Ajustement de l'arrière-plan avec des étoiles */}
             <div className="absolute inset-0">
                 <div id="stars" className="absolute inset-0"></div>
