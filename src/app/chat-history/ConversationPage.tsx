@@ -195,10 +195,6 @@ export default function PageConversation() {
                     selectedConversation ? "hidden md:block" : ""
                 }`}
             >
-                <h2 className="text-2xl font-bold mb-4 text-foreground">
-                    Conversations
-                </h2>
-
                 {/* Search and filter controls */}
                 <div className="mb-4 space-y-2">
                     <div className="flex items-center space-x-2">

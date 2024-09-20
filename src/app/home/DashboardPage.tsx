@@ -1,25 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-    addDays,
-    differenceInDays,
-    eachMonthOfInterval,
-    format,
-} from "date-fns";
+import { differenceInDays, eachMonthOfInterval, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
-import {
-    Home,
-    Folder,
-    Mail,
-    MessageSquare,
-    ThumbsUp,
-    TrendingUp,
-    Users,
-} from "lucide-react";
-import DownloadButton from "./DownloadButton";
+import { Home, MessageSquare, ThumbsUp, TrendingUp, Users } from "lucide-react";
 import {
     Tabs,
     TabsContent,
@@ -27,10 +13,8 @@ import {
     TabsTrigger,
 } from "../../../components/tabs";
 import OverviewTab from "./OverviewTab";
-import FilesTab from "../files/FilesTab";
-import ContactTab from "../contact/ContactTab";
 import { DatePickerWithRange } from "../components/ui/date-picker";
-import Login from "../login/page";
+import ConversationPage from "../chat-history/ConversationPage";
 
 interface FileData {
     id: number;
@@ -169,7 +153,9 @@ const DashboardPage: React.FC = () => {
                 transition={{ duration: 0.5 }}
             >
                 <div>
-                    <h5 className="font-bold">SOFIA</h5>
+                    <h5 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-white">
+                        SOFIA
+                    </h5>
                     <h1 className="text-2xl sm:text-3xl font-bold">
                         Tableau de bord
                     </h1>
@@ -222,7 +208,7 @@ const DashboardPage: React.FC = () => {
                         />
                     </TabsContent>
                     <TabsContent value="chat-history">
-                        <Login />
+                        <ConversationPage />
                     </TabsContent>
                 </motion.div>
             </Tabs>

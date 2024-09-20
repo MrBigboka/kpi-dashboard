@@ -146,9 +146,11 @@ export default function Sidebar() {
             </div>
 
             {/* Toggle Dark/Light Mode */}
-            <div className="flex items-center justify-center my-4">
-                <ThemeToggle />
-            </div>
+            {isOpen && (
+                <div className="flex items-center justify-center my-4">
+                    <ThemeToggle />
+                </div>
+            )}
 
             {/* Menu de Navigation */}
             <ScrollArea className="flex-grow h-0 md:h-auto">
