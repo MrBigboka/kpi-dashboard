@@ -14,7 +14,7 @@ import {
     TableRow,
 } from "../../../components/table";
 import FileUpload from "../helper/FileUpload";
-import { FileText, Image, File as FileIcon } from "lucide-react";
+import { FileText, Image, File as FileIcon, Loader2 } from "lucide-react";
 
 interface FileData {
     id: string;
@@ -26,6 +26,7 @@ interface FileData {
 
 const FilesTab: React.FC = () => {
     const [uploadedFiles, setUploadedFiles] = useState<FileData[]>([]);
+    const [isLoading, setIsLoading] = useState(true); // Ajout de l'état de chargement
 
     // Fonction pour récupérer la liste des fichiers depuis Google Drive
     const fetchFiles = async () => {
@@ -47,12 +48,21 @@ const FilesTab: React.FC = () => {
                 "Erreur lors de la récupération des fichiers :",
                 error
             );
+        } finally {
+            setIsLoading(false); // Fin du chargement
         }
     };
 
     // Appeler l'API au montage du composant pour charger les fichiers
     useEffect(() => {
+        // Timeout maximum de 9 secondes pour s'assurer que l'écran de chargement ne dure pas indéfiniment
+        const timeoutId = setTimeout(() => {
+            setIsLoading(false);
+        }, 9000);
+
         fetchFiles();
+
+        return () => clearTimeout(timeoutId); // Nettoyage du timeout
     }, []);
 
     function getFileIcon(type: string) {
@@ -76,6 +86,15 @@ const FilesTab: React.FC = () => {
         }));
         setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
     };
+
+    // Affichage du spinner si les fichiers sont en cours de chargement
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <Loader2 className="animate-spin h-8 w-8 text-gray-600 dark:text-gray-300" />
+            </div>
+        );
+    }
 
     return (
         <>

@@ -27,9 +27,10 @@ import {
     TabsTrigger,
 } from "../../../components/tabs";
 import OverviewTab from "./OverviewTab";
-import FilesTab from "./FilesTab";
-import ContactTab from "./ContactTab";
+import FilesTab from "../files/FilesTab";
+import ContactTab from "../contact/ContactTab";
 import { DatePickerWithRange } from "../components/ui/date-picker";
+import Login from "../login/page";
 
 interface FileData {
     id: number;
@@ -168,8 +169,9 @@ const DashboardPage: React.FC = () => {
                 transition={{ duration: 0.5 }}
             >
                 <div>
+                    <h5 className="font-bold">SOFIA</h5>
                     <h1 className="text-2xl sm:text-3xl font-bold">
-                        Tableau de bord - SOFIA
+                        Tableau de bord
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">
                         Analyse et performance du chatbot
@@ -185,9 +187,6 @@ const DashboardPage: React.FC = () => {
                         <div className="w-full sm:w-auto">
                             <DatePickerWithRange />
                         </div>
-                        <div className="w-full sm:w-auto">
-                            <DownloadButton />
-                        </div>
                     </motion.div>
                 )}
             </motion.div>
@@ -202,13 +201,9 @@ const DashboardPage: React.FC = () => {
                         <Home className="mr-2 h-5 w-5" />
                         Vue d'ensemble
                     </TabsTrigger>
-                    <TabsTrigger value="files">
-                        <Folder className="mr-2 h-5 w-5" />
-                        Envoie de fichier
-                    </TabsTrigger>
-                    <TabsTrigger value="contact">
-                        <Mail className="mr-2 h-5 w-5" />
-                        Contact
+                    <TabsTrigger value="chat-history">
+                        <MessageSquare className="mr-2 h-5 w-5" />
+                        Historique des chats
                     </TabsTrigger>
                 </TabsList>
                 <motion.div
@@ -226,11 +221,8 @@ const DashboardPage: React.FC = () => {
                             conversations={conversations}
                         />
                     </TabsContent>
-                    <TabsContent value="files">
-                        <FilesTab />
-                    </TabsContent>
-                    <TabsContent value="contact">
-                        <ContactTab />
+                    <TabsContent value="chat-history">
+                        <Login />
                     </TabsContent>
                 </motion.div>
             </Tabs>

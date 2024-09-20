@@ -46,6 +46,7 @@ export default function Login() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
+                whileHover={{ scale: 1.05, y: -5 }}
                 className="z-10 w-full max-w-sm p-8 bg-[rgba(16,19,231,0.2)] backdrop-blur-lg border border-white/30 rounded-2xl shadow-xl"
             >
                 {/* Logo */}

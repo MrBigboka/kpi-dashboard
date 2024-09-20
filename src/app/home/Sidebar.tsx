@@ -7,8 +7,10 @@ import {
     ChevronLeft,
     ChevronRight,
     LogOut,
-    MessageCircle,
     Camera,
+    Cog,
+    Folder,
+    Mail,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { ScrollArea } from "../../../@/components/ui/scroll-area";
@@ -20,6 +22,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../lib/util";
 import { Button } from "../../../@/components/ui/button";
+import FilesTab from "../files/FilesTab"; // Import du FilesTab
+import ContactTab from "../contact/ContactTab"; // Import du ContactTab
 
 export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,8 +36,12 @@ export default function Sidebar() {
     useEffect(() => {
         if (pathname === "/") {
             setActive("dashboard");
-        } else if (pathname === "/chat-history") {
-            setActive("chat-history");
+        } else if (pathname === "/automatisation") {
+            setActive("automatisation-request");
+        } else if (pathname === "/files") {
+            setActive("files");
+        } else if (pathname === "/contact") {
+            setActive("contact");
         }
     }, [pathname]);
 
@@ -64,10 +72,22 @@ export default function Sidebar() {
             path: "/",
         },
         {
-            id: "chat-history",
-            icon: MessageCircle,
-            label: "Historique des chats",
-            path: "/chat-history",
+            id: "automatisation-request",
+            icon: Cog,
+            label: "Demande d'automatisation",
+            path: "/automatisation",
+        },
+        {
+            id: "files",
+            icon: Folder,
+            label: "Envoie de fichiers",
+            path: "/files",
+        },
+        {
+            id: "contact",
+            icon: Mail,
+            label: "Contact",
+            path: "/contact",
         },
     ];
 
@@ -138,9 +158,8 @@ export default function Sidebar() {
                             key={item.id}
                             variant="ghost"
                             className={cn(
-                                "w-full justify-center text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white relative",
-                                active === item.id &&
-                                    "bg-gray-100 dark:bg-gray-800",
+                                "w-full justify-center text-gray-700 dark:text-gray-300 relative rounded-none",
+                                active === item.id && "bg-transparent",
                                 "group"
                             )}
                             onClick={() => {
@@ -153,7 +172,10 @@ export default function Sidebar() {
                                     "transition-all",
                                     isOpen
                                         ? "h-4 w-4 mr-2"
-                                        : "h-5 w-5 block mx-auto"
+                                        : "h-5 w-5 block mx-auto",
+                                    active === item.id
+                                        ? "text-[#007bff]"
+                                        : "text-gray-700 dark:text-gray-300 group-hover:text-[#007bff]"
                                 )}
                             />
                             <AnimatePresence>
@@ -188,7 +210,7 @@ export default function Sidebar() {
                     className={cn(
                         "w-full justify-center relative overflow-hidden",
                         isOpen
-                            ? "text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-800 hover:text-red-700 dark:hover:text-red-200"
+                            ? "text-red-500 rounded-none dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-800 hover:text-red-700 dark:hover:text-red-200"
                             : "text-red-500 dark:text-red-400 border-red-500 dark:border-red-400",
                         active === "logout" && "bg-red-100 dark:bg-red-800",
                         !isOpen && "h-12 p-0"
