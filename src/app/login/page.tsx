@@ -56,11 +56,11 @@ export default function Login() {
                     transition={{ delay: 0.2, duration: 0.5 }}
                 >
                     <Image
-                        src="/smartscaling.png"
-                        width={175}
-                        height={75}
+                        src="/smartscaling3.png"
+                        width={225}
+                        height={125}
                         alt="SmartScaling Logo"
-                        className="w-auto h-16 object-contain"
+                        className="object-contain"
                     />
                 </motion.div>
 
